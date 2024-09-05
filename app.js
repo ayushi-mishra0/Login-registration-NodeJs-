@@ -14,6 +14,11 @@ const multerRouter = require('./routes/userRoutes');
 const session = require('express-session');
 const RedisStore = require('connect-redis').default; // For ESM syntax, use .default
 const Redis = require('ioredis'); // Import ioredis
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+const app = express(); // Initialize express application
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const redisClient = new Redis({
   host: '127.0.0.1', // Redis server host
@@ -21,7 +26,6 @@ const redisClient = new Redis({
   // password: 'your-redis-password', // Uncomment if your Redis instance is password protected
 });
 
-const app = express(); // Initialize express application
 
 app.use(
     session({

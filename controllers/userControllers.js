@@ -9,7 +9,7 @@ var db = require("../models")
 const nodemailer = require("nodemailer");
 
 var addUser = async (req, res) =>{
-    const jane = await User.create({ firstName: "abhishek" ,lastName: "Kumar"});
+    const jane = await User.create({ firstName: "raghav" ,lastName: "Singh"});
         //const jane = User.build({ firstName: "Jane" ,lastName: "singh"});
         console.log(jane instanceof User); // true
         console.log(jane.firstName); // "Jane"
@@ -38,11 +38,32 @@ var getUser = async (req,res)=>{
     res.status(200).json({data:data});
 }
 
-var postUsers = async (req,res)=>{
-    var postData = req.body;
-    const data = await User.create(postData);
-    res.status(200).json({data:data});
-}
+var postUsers = async (req, res) => {
+    try {
+        // Extract user data from request body
+        const { firstName, lastName } = req.body;
+
+        // Check if a user with the same firstName already exists
+        const existingUser = await User.findOne({ where: { firstName: firstName } });
+
+        if (existingUser) {
+            // Respond with an error if a duplicate is found
+            return res.status(400).json({ message: "User with this firstName already exists" });
+        }
+
+        // Create a new user if no duplicate is found
+        const newUser = await User.create(req.body);
+        res.status(201).json({ data: newUser });
+    } catch (error) {
+        // Handle unexpected errors
+        console.error(error);
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            res.status(400).json({ message: "Duplicate entry error" });
+        } else {
+            res.status(500).json({ message: "An internal server error occurred" });
+        }
+    }
+};
 
 var deleteUser = async (req,res)=>{
     const data = await User.destroy({
