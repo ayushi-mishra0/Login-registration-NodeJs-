@@ -1,25 +1,18 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerAutogen = require('swagger-autogen')();
+const outputFile = './swagger_output.json'; // The output Swagger JSON file
+const endpointsFiles = ['./routes/users.js']; // Path to the API routes file(s)
 
-const swaggerDefinition = {
-  openapi: '3.0.0',
+const doc = {
   info: {
     title: 'Node Express CRUD API',
-    version: '1.0.0',
     description: 'A simple CRUD API using Node.js and Express',
+    version: '1.0.0',
   },
-  servers: [
-    {
-      url: 'http://localhost:3000',
-      description: 'Development server',
-    },
-  ],
+  host: 'localhost:3000',
+  schemes: ['http'],
 };
 
-const options = {
-  swaggerDefinition,
-  apis: ['./routes/*.js'], // Path to the API docs
-};
-
-const swaggerSpec = swaggerJSDoc(options);
-
-module.exports = swaggerSpec;
+// Generate swagger_output.json
+swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
+  require('./app'); // Run the app after the swagger JSON is generated
+});

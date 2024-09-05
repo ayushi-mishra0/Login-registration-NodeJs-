@@ -15,10 +15,12 @@ const session = require('express-session');
 const RedisStore = require('connect-redis').default; // For ESM syntax, use .default
 const Redis = require('ioredis'); // Import ioredis
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swagger');
+//const swaggerSpec = require('./swagger');
+const swaggerFile = require('./swagger_output.json'); // Output file from swagger-autogen
+
 const app = express(); // Initialize express application
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const redisClient = new Redis({
   host: '127.0.0.1', // Redis server host
