@@ -54,7 +54,7 @@ const generateToken = (user) => {
 // Producer function to send a registration message
 
 // Producer function to send a registration message
-const registerUser = async (req, res) => {
+/*const registerUser = async (req, res) => {
     let connection;
     let channel;
     try {
@@ -137,56 +137,56 @@ const registerUser = async (req, res) => {
         if (channel) await channel.close();
         if (connection) await connection.close();
     }
-  };
+  };*/
   
         
-// let registerUser = async (req, res) => {
+let registerUser = async (req, res) => {
     
-//         try {
-//             const { name, email, phone, dob, address, password } = req.body;
+        try {
+            const { name, email, phone, dob, address, password } = req.body;
 
-//             // Check if the user already exists
-//             const existingUser = await User.findOne({ where: { email } });
-//             if (existingUser) {
-//                 return res.status(400).json({ message: 'Email already in use' });
-//             }
+            // Check if the user already exists
+            const existingUser = await User.findOne({ where: { email } });
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
 
-//             // Hash the password
-//             const salt = await bcrypt.genSalt(10);
-//             const hashedPassword = await bcrypt.hash(password.toString(), salt);
+            // Hash the password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password.toString(), salt);
 
-//             const otp = emailVerifier.generateOTP();
-//         const verificationToken = emailVerifier.generateVerificationToken();
-//         const expirationTime = new Date(Date.now() + 30 * 60 * 1000);
-//             // Create a new user record
-//             const newUser = await User.create({
-//                 name,
-//                 email,
-//                 phone,
-//                 dob,
-//                 address,
-//                 profileImage: req.file ? req.file.filename : null,
-//                 password: hashedPassword,
-//                 otp: otp,
-//                 otpExpiresAt: expirationTime,
-//                 verificationToken: verificationToken,
-//                 verificationTokenExpiresAt: expirationTime
-//             });
-//             console.log(newUser);
-//             // Send a confirmation email
-//             let subject = 'Welcome to Registration Portal'; // Subject line
-//         let text = `Hello ${newUser.name},\n\nThank you for registering on My App!,\n\nBest regards,\nAntier Solutions Pvt. Ltd.`; // Plain text body
-//         let html = `<p>Hello <strong>${newUser.name}</strong>,</p><p>Thank you for registering and connecting with us.!</p>`; // HTML body
-//         await sendEmail.sendRegistrationMail(newUser, subject, text, html);
+            const otp = emailVerifier.generateOTP();
+        const verificationToken = emailVerifier.generateVerificationToken();
+        const expirationTime = new Date(Date.now() + 30 * 60 * 1000);
+            // Create a new user record
+            const newUser = await User.create({
+                name,
+                email,
+                phone,
+                dob,
+                address,
+                profileImage: req.file ? req.file.filename : null,
+                password: hashedPassword,
+                otp: otp,
+                otpExpiresAt: expirationTime,
+                verificationToken: verificationToken,
+                verificationTokenExpiresAt: expirationTime
+            });
+            console.log(newUser);
+            // Send a confirmation email
+            let subject = 'Welcome to Registration Portal'; // Subject line
+        let text = `Hello ${newUser.name},\n\nThank you for registering on My App!,\n\nBest regards,\nAntier Solutions Pvt. Ltd.`; // Plain text body
+        let html = `<p>Hello <strong>${newUser.name}</strong>,</p><p>Thank you for registering and connecting with us.!</p>`; // HTML body
+        await sendEmail.sendRegistrationMail(newUser, subject, text, html);
 
-//         await emailVerifier.sendOtpEmail(newUser);
-//         //console.log(newUser);
-//         res.status(201).json({ message: 'User registered successfully and email sent on register email', user: newUser });
-//     } catch (error) {
-//         console.error('Error registering user:', error);
-//         res.status(500).json({ message: 'Error registering user', error: error.message });
-//         }
-// };
+        await emailVerifier.sendOtpEmail(newUser);
+        //console.log(newUser);
+        res.status(201).json({ message: 'User registered successfully and email sent on register email', user: newUser });
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).json({ message: 'Error registering user', error: error.message });
+        }
+};
 
 // Handle user login
 
@@ -473,6 +473,8 @@ let deleteUser = async (req, res) => {
         res.status(500).json({ error: 'Error deleting user: ' + err.message });
     }
 };
+
+
 
 
  module.exports = {

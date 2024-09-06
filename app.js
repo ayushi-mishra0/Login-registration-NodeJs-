@@ -17,8 +17,9 @@ const Redis = require('ioredis'); // Import ioredis
 const swaggerUi = require('swagger-ui-express');
 //const swaggerSpec = require('./swagger');
 const swaggerFile = require('./swagger_output.json'); // Output file from swagger-autogen
-
+const otpReminderCron = require('./otpReminderCron');
 const app = express(); // Initialize express application
+
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
