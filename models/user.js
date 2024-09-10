@@ -8,7 +8,7 @@
           firstName: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            //unique: false,
             validate:{
               isAlpha: {
                 msg:'Only alphabets are allowed'

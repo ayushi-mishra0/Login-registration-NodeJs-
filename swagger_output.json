@@ -5,7 +5,7 @@
     "description": "A simple CRUD API using Node.js and Express",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "localhost:3000/users",
   "basePath": "/",
   "schemes": [
     "http"

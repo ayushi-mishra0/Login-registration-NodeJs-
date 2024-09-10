@@ -9,7 +9,7 @@ var db = require("../models")
 const nodemailer = require("nodemailer");
 
 var addUser = async (req, res) =>{
-    const jane = await User.create({ firstName: "raghav" ,lastName: "Singh"});
+    const jane = await User.create({ firstName: "ravi" ,lastName: "kumar"});
         //const jane = User.build({ firstName: "Jane" ,lastName: "singh"});
         console.log(jane instanceof User); // true
         console.log(jane.firstName); // "Jane"
@@ -23,6 +23,7 @@ var addUser = async (req, res) =>{
         console.log(jane.toJSON());
         res.status(200).json(jane.toJSON());
     }
+    
 
 var getUsers = async (req,res)=>{
     const data = await User.findAll({});
@@ -38,35 +39,37 @@ var getUser = async (req,res)=>{
     res.status(200).json({data:data});
 }
 
-var postUsers = async (req, res) => {
-    try {
-        // Extract user data from request body
-        const { firstName, lastName } = req.body;
-
-        // Check if a user with the same firstName already exists
-        const existingUser = await User.findOne({ where: { firstName: firstName } });
-
-        if (existingUser) {
-            // Respond with an error if a duplicate is found
-            return res.status(400).json({ message: "User with this firstName already exists" });
-        }
-
-        // Create a new user if no duplicate is found
-        const newUser = await User.create(req.body);
-        res.status(201).json({ data: newUser });
-    } catch (error) {
-        // Handle unexpected errors
-        console.error(error);
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            res.status(400).json({ message: "Duplicate entry error" });
-        } else {
-            res.status(500).json({ message: "An internal server error occurred" });
-        }
+var postUsers = async (req, res)=>{
+    var postData = req.body;
+    if(postData.length>1){
+        var data = await User.bulkCreate(postData);
+    }else{
+        var data = await User.create(postData);
     }
-};
+    res.status(200).json({data:data});
+}
 
-var deleteUser = async (req,res)=>{
-    const data = await User.destroy({
+var deleteUser = async (req, res) => {
+    const userId = req.params.id;
+    
+    // Check if the user exists
+    const user = await User.findByPk(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // If user exists, proceed to delete
+    const result = await User.destroy({
+      where: { id: userId }
+    });
+  
+    res.status(200).json({ data: result });
+  }
+  
+  var updateUser = async (req, res)=>{
+    var updatedData = req.body;
+    const data = await User.update(updatedData,{
         where:{
             id:req.params.id
         }
@@ -74,112 +77,112 @@ var deleteUser = async (req,res)=>{
     res.status(200).json({data:data});
 }
 
-var updateUser = async (req,res)=>{
-    var updatedData = req.body;
-    const data = await User.update(updatedData,{
-        where:{
-            id:req.params.id
-        }
-    });// Importing the Customer model
-    const { Customer } = require('./models'); // Adjust the path if your models are in a different folder
+// var updateUser = async (req,res)=>{
+//     var updatedData = req.body;
+//     const data = await User.update(updatedData,{
+//         where:{
+//             id:req.params.id
+//         }
+//     });// Importing the Customer model
+//     const { Customer } = require('../models'); // Adjust the path if your models are in a different folder
     
-    // Function to create a new customer
-    async function createCustomer(name, email) {
-        try {
-            const newCustomer = await Customer.create({
-                name: name,
-                email: email
-            });
-            console.log('Customer created:', newCustomer);
-        } catch (error) {
-            console.error('Error creating customer:', error);
-        }
-    }
+//     // Function to create a new customer
+//     async function createCustomer(name, email) {
+//         try {
+//             const newCustomer = await Customer.create({
+//                 name: name,
+//                 email: email
+//             });
+//             console.log('Customer created:', newCustomer);
+//         } catch (error) {
+//             console.error('Error creating customer:', error);
+//         }
+//     }
     
-    // Function to find a customer by email
-    async function findCustomerByEmail(email) {
-        try {
-            const customer = await Customer.findOne({
-                where: { email: email }
-            });
-            if (customer) {
-                console.log('Customer found:', customer);
-            } else {
-                console.log('Customer not found');
-            }
-        } catch (error) {
-            console.error('Error finding customer:', error);
-        }
-    }
+//     // Function to find a customer by email
+//     async function findCustomerByEmail(email) {
+//         try {
+//             const customer = await Customer.findOne({
+//                 where: { email: email }
+//             });
+//             if (customer) {
+//                 console.log('Customer found:', customer);
+//             } else {
+//                 console.log('Customer not found');
+//             }
+//         } catch (error) {
+//             console.error('Error finding customer:', error);
+//         }
+//     }
     
-    // Function to update a customer's name by email
-    async function updateCustomerName(email, newName) {
-        try {
-            const [updated] = await Customer.update({ name: newName }, {
-                where: { email: email }
-            });
-            if (updated) {
-                console.log('Customer name updated');
-            } else {
-                console.log('Customer not found');
-            }
-        } catch (error) {
-            console.error('Error updating customer:', error);
-        }
-    }
+//     // Function to update a customer's name by email
+//     async function updateCustomerName(email, newName) {
+//         try {
+//             const [updated] = await Customer.update({ name: newName }, {
+//                 where: { email: email }
+//             });
+//             if (updated) {
+//                 console.log('Customer name updated');
+//             } else {
+//                 console.log('Customer not found');
+//             }
+//         } catch (error) {
+//             console.error('Error updating customer:', error);
+//         }
+//     }
     
-    // Function to delete a customer by email
-    async function deleteCustomerByEmail(email) {
-        try {
-            const deleted = await Customer.destroy({
-                where: { email: email }
-            });
-            if (deleted) {
-                console.log('Customer deleted');
-            } else {
-                console.log('Customer not found');
-            }
-        } catch (error) {
-            console.error('Error deleting customer:', error);
-        }
-    }
+//     // Function to delete a customer by email
+//     async function deleteCustomerByEmail(email) {
+//         try {
+//             const deleted = await Customer.destroy({
+//                 where: { email: email }
+//             });
+//             if (deleted) {
+//                 console.log('Customer deleted');
+//             } else {
+//                 console.log('Customer not found');
+//             }
+//         } catch (error) {
+//             console.error('Error deleting customer:', error);
+//         }
+//     }
     
-    // Function to fetch all customers
-    async function getAllCustomers() {
-        try {
-            const customers = await Customer.findAll();
-            console.log('All customers:', customers);
-        } catch (error) {
-            console.error('Error fetching customers:', error);
-        }
-    }
+//     // Function to fetch all customers
+//     async function getAllCustomers() {
+//         try {
+//             const customers = await Customer.findAll();
+//             console.log('All customers:', customers);
+//         } catch (error) {
+//             console.error('Error fetching customers:', error);
+//         }
+//     }
     
-    // Example usage of the functions
-    async function runExamples() {
-        // Creating a new customer
-        await createCustomer('John Doe', 'john.doe@example.com');
+//     // Example usage of the functions
+//     async function runExamples() {
+//         // Creating a new customer
+//         await createCustomer('John Doe', 'john.doe@example.com');
     
-        // Finding a customer by email
-        await findCustomerByEmail('john.doe@example.com');
+//         // Finding a customer by email
+//         await findCustomerByEmail('john.doe@example.com');
     
-        // Updating a customer's name
-        await updateCustomerName('john.doe@example.com', 'Jonathan Doe');
+//         // Updating a customer's name
+//         await updateCustomerName('john.doe@example.com', 'Jonathan Doe');
     
-        // Fetching all customers
-        await getAllCustomers();
+//         // Fetching all customers
+//         await getAllCustomers();
     
-        // Deleting a customer by email
-        await deleteCustomerByEmail('john.doe@example.com');
+//         // Deleting a customer by email
+//         await deleteCustomerByEmail('john.doe@example.com');
     
-        // Fetching all customers again to confirm deletion
-        await getAllCustomers();
-    }
+//         // Fetching all customers again to confirm deletion
+//         await getAllCustomers();
+//     }
     
-    // Run the examples
-    runExamples();
+//     // Run the examples
+//     runExamples();
     
-    res.status(200).json({data:data});
-}
+//     res.status(200).json({data:data});
+// }
 
  //var queryUser = async (req, res)=>{
 //     const data = await User.findAll({

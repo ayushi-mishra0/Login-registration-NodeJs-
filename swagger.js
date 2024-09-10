@@ -8,11 +8,11 @@ const doc = {
     description: 'A simple CRUD API using Node.js and Express',
     version: '1.0.0',
   },
-  host: 'localhost:3000',
+  host: 'localhost:3000/users',
   schemes: ['http'],
 };
 
 // Generate swagger_output.json
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-  require('./app'); // Run the app after the swagger JSON is generated
+  require('./bin/www'); // Run the app after the swagger JSON is generated
 });

@@ -30,5 +30,5 @@ const sequelize = new Sequelize('employeedb', 'root', 'root', {
 //db.contact.belongsToMany(db.user, { through: db.userContacts });
 
 
-db.sequelize.sync({force:true});
+db.sequelize.sync({force:false});
 module.exports = db
