@@ -3,8 +3,8 @@ const session = require('express-session');
 const RedisStore = require('connect-redis').default;
 
 const redisClient = new Redis({
-  host: '127.0.0.1',
-  port: 6379,
+  host: '172.17.0.1',
+  port: 6378,
   // password: 'your-redis-password', // Uncomment if your Redis instance is password protected
 });
 

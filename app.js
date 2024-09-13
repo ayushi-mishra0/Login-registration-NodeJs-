@@ -24,8 +24,8 @@ const app = express(); // Initialize express application
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const redisClient = new Redis({
-  host: '127.0.0.1', // Redis server host
-  port: 6379,        // Redis server port
+  host: '172.17.0.1', // Redis server host
+  port: 6378,        // Redis server port
   // password: 'your-redis-password', // Uncomment if your Redis instance is password protected
 });
 

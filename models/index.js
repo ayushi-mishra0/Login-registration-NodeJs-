@@ -2,7 +2,7 @@
 const {Sequelize,DataTypes,Model} = require('sequelize');
 
 const sequelize = new Sequelize('employeedb', 'root', 'root', {
-    host: 'localhost',
+    host: '172.17.0.1',
     logging:false,
     dialect: 'mysql' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
   });
