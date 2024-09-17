@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-require('dotenv').config();
+//require('dotenv').config();
 const logger = require('morgan');
 
 // Import routers

@@ -1,50 +1,26 @@
-# # Use an official Node.js runtime as a base image
-# FROM node:14
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
-# # Set the working directory inside the container
-# WORKDIR /usr/src/app
+# Install git (required for some npm packages that depend on git repos)
+RUN apt-get update && apt-get install -y git
 
-# # Copy package.json and package-lock.json
-# COPY package*.json ./
-
-# # Install dependencies
-# RUN npm install --only=production
-
-# # Copy the rest of the application code
-# COPY . .
-
-# # Expose port 3000 to be accessible from outside the container
-# EXPOSE 3000
-
-# # Start the Node.js application
-# CMD [ "node", "./bin/www" ]
-
-# Use Ubuntu as the base image
-FROM ubuntu:latest
-
-# Update and install dependencies
-RUN apt-get update && apt-get install -y curl
-
-# Download Node.js setup script from NodeSource
-RUN curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
-
-# Run the Node.js setup script to install Node.js and npm
-RUN bash /tmp/nodesource_setup.sh && apt-get install -y nodejs
-
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package files
+# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 
-# Install node modules
+# Install app dependencies
 RUN npm install
 
-# Copy the application files
+# Copy the entire project directory to the working directory
 COPY . .
 
-# Expose the application port (if needed)
+# Ensure environment variables are available
+COPY .env .env
+
+# Expose the port your application runs on (adjust if your app uses a different port)
 EXPOSE 9000
 
-# Run the application
-ENTRYPOINT ["node", "./bin/www"]
+# Start the app by running the 'bin/www' file
+ENTRYPOINT ["node", "bin/www"]
