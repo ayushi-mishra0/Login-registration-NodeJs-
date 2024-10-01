@@ -5,7 +5,6 @@ const RedisStore = require('connect-redis').default;
 const redisClient = new Redis({
   host: '172.17.0.1',
   port: 6378,
-  // password: 'your-redis-password', // Uncomment if your Redis instance is password protected
 });
 
 // Middleware to check if user is authenticated

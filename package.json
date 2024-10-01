@@ -2,6 +2,7 @@
   "name": "express-generator-projectnew",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "nodemon ./bin/www",
     "test": "mocha",
@@ -40,7 +41,8 @@
     "sequelize": "^6.37.3",
     "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "web3": "^4.13.0"
   },
   "devDependencies": {
     "mocha": "^10.7.3",

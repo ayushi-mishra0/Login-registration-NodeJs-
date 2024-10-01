@@ -12,7 +12,7 @@ services:
       REPLICA_HOST: mysql-replica
       REPLICA_PORT: 3307
       REDIS_HOST: redis
-      REDIS_PORT: 6379
+      REDIS_PORT: 6378
     ports:
       - "9000:9000"
     depends_on:

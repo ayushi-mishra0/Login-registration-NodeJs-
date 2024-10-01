@@ -2,11 +2,14 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
+import newFile from './controllers/new.js'; // Adjust the path based on your folder structure
+
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 //require('dotenv').config();
 const logger = require('morgan');
+
 
 // Import routers
 const indexRouter = require('./routes/index');
@@ -22,6 +25,7 @@ const swaggerFile = require('./swagger_output.json'); // Output file from swagge
 const otpReminderCron = require('./otpReminderCron');
 const app = express(); // Initialize express application
 
+newFile(); // If `new.js` exports a function to call
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
